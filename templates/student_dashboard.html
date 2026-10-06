@@ -2,140 +2,488 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Dashboard | StudentHub</title>
+    <title>My Dashboard | StudentHub</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
+
 
 <body>
 
-    <!-- NAVBAR -->
+    <!-- Navigation -->
 
-    <div class="navbar">
+    <nav class="navbar">
 
         <div class="logo">
             StudentHub
         </div>
 
-        <nav>
-            <a href="{{ url_for('student_dashboard') }}">
+        <div class="nav-links">
+
+            <a href="{{ url_for('student_dashboard') }}"
+               class="active">
                 Dashboard
             </a>
 
             <a href="{{ url_for('logout') }}">
                 Logout
             </a>
-        </nav>
 
-    </div>
+        </div>
+
+    </nav>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- Main Dashboard -->
 
-    <div class="container">
+    <main class="student-dashboard-page">
 
-        <!-- Welcome Section -->
 
-        <div class="student-welcome">
+        <!-- Welcome -->
 
-            <div>
-                <p class="tag">STUDENT PORTAL</p>
+        <section class="student-welcome">
+
+            <div class="student-welcome-content">
+
+                <span class="student-label">
+                    STUDENT PORTAL
+                </span>
 
                 <h1>
                     Welcome, {{ student.name }} 👋
                 </h1>
 
                 <p>
-                    Here is an overview of your student information.
+                    Here's your academic performance overview
+                    and personalised insights.
                 </p>
+
             </div>
 
-            <div class="student-avatar">
+
+            <div class="student-avatar-large">
                 {{ student.name[0] }}
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- SUMMARY CARDS -->
 
-        <div class="student-cards">
+        <!-- Academic Overview -->
 
-            <div class="student-card">
-
-                <span class="student-card-label">
-                    Course
-                </span>
-
-                <h2>
-                    {{ student.course }}
-                </h2>
-
-            </div>
+        <section class="student-overview">
 
 
-            <div class="student-card">
+            <!-- Attendance -->
 
-                <span class="student-card-label">
-                    Status
-                </span>
+            <div class="student-stat-card">
 
-                {% if student.status == "Active" %}
-
-                    <h2 class="active-text">
-                        Active
-                    </h2>
-
-                {% else %}
-
-                    <h2 class="inactive-text">
-                        Inactive
-                    </h2>
-
-                {% endif %}
-
-            </div>
-
-
-            <div class="student-card">
-
-                <span class="student-card-label">
-                    Enrollment Date
-                </span>
-
-                <h2>
-                    {{ student.enrollment_date }}
-                </h2>
-
-            </div>
-
-        </div>
-
-
-        <!-- PROFILE -->
-
-        <div class="student-information">
-
-            <div class="section-heading">
+                <div class="stat-icon">
+                    📅
+                </div>
 
                 <div>
-                    <p class="tag">MY PROFILE</p>
+
+                    <span>
+                        Attendance
+                    </span>
 
                     <h2>
-                        Personal Information
+                        {{ attendance }}%
                     </h2>
+
+                    {% if attendance >= 75 %}
+
+                    <small class="stat-good">
+                        ✓ Good attendance
+                    </small>
+
+                    {% else %}
+
+                    <small class="stat-warning">
+                        ⚠ Needs improvement
+                    </small>
+
+                    {% endif %}
+
                 </div>
 
             </div>
 
 
-            <div class="student-info-grid">
 
-                <div class="info-box">
+            <!-- Marks -->
+
+            <div class="student-stat-card">
+
+                <div class="stat-icon">
+                    📝
+                </div>
+
+                <div>
+
+                    <span>
+                        Average Marks
+                    </span>
+
+                    <h2>
+                        {{ average_marks }}%
+                    </h2>
+
+                    {% if average_marks >= 70 %}
+
+                    <small class="stat-good">
+                        ✓ Strong performance
+                    </small>
+
+                    {% elif average_marks >= 50 %}
+
+                    <small class="stat-warning">
+                        → Room for improvement
+                    </small>
+
+                    {% else %}
+
+                    <small class="stat-danger">
+                        ⚠ Needs attention
+                    </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Assignments -->
+
+            <div class="student-stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div>
+
+                    <span>
+                        Assignment Completion
+                    </span>
+
+                    <h2>
+                        {{ assignment_completion }}%
+                    </h2>
+
+                    {% if assignment_completion >= 80 %}
+
+                    <small class="stat-good">
+                        ✓ Excellent
+                    </small>
+
+                    {% else %}
+
+                    <small class="stat-warning">
+                        → Keep improving
+                    </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- AI Risk -->
+
+            <div class="student-stat-card">
+
+                <div class="stat-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <span>
+                        AI Academic Risk
+                    </span>
+
+
+                    {% if risk == "Low Risk" %}
+
+                    <h2 class="risk-low">
+                        Low
+                    </h2>
+
+                    <small class="stat-good">
+                        ✓ Performing well
+                    </small>
+
+
+                    {% elif risk == "Medium Risk" %}
+
+                    <h2 class="risk-medium">
+                        Medium
+                    </h2>
+
+                    <small class="stat-warning">
+                        ! Monitor performance
+                    </small>
+
+
+                    {% else %}
+
+                    <h2 class="risk-high">
+                        High
+                    </h2>
+
+                    <small class="stat-danger">
+                        ⚠ Needs support
+                    </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- Main Dashboard Grid -->
+
+        <section class="student-main-grid">
+
+
+            <!-- Performance Chart -->
+
+            <div class="student-dashboard-card performance-card">
+
+                <div class="dashboard-card-header">
+
+                    <div>
+
+                        <h2>
+                            Academic Performance
+                        </h2>
+
+                        <p>
+                            Your current performance indicators
+                        </p>
+
+                    </div>
+
+                    <span class="chart-icon">
+                        📊
+                    </span>
+
+                </div>
+
+
+                <!--
+                    Data is stored in HTML attributes.
+                    This prevents Jinja from being placed
+                    directly inside JavaScript.
+                -->
+
+                <div
+                    id="performanceData"
+                    data-attendance="{{ attendance }}"
+                    data-marks="{{ average_marks }}"
+                    data-assignments="{{ assignment_completion }}">
+                </div>
+
+
+                <div class="student-chart-container">
+
+                    <canvas id="performanceChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- AI Insight -->
+
+            <div class="student-dashboard-card insight-card">
+
+                <div class="dashboard-card-header">
+
+                    <div>
+
+                        <span class="ai-small-label">
+                            AI INSIGHT
+                        </span>
+
+                        <h2>
+                            Personalised Insight
+                        </h2>
+
+                    </div>
+
+                    <span class="insight-icon">
+                        🧠
+                    </span>
+
+                </div>
+
+
+                <div class="insight-content">
+
+
+                    {% if risk == "Low Risk" %}
+
+                    <div class="insight-status low">
+                        ✓
+                    </div>
+
+
+                    {% elif risk == "Medium Risk" %}
+
+                    <div class="insight-status medium">
+                        !
+                    </div>
+
+
+                    {% else %}
+
+                    <div class="insight-status high">
+                        ⚠
+                    </div>
+
+                    {% endif %}
+
+
+                    <p>
+                        {{ insight }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- Academic Alerts -->
+
+        {% if alerts %}
+
+        <section class="student-dashboard-card alerts-card">
+
+            <div class="dashboard-card-header">
+
+                <div>
+
+                    <h2>
+                        Academic Alerts
+                    </h2>
+
+                    <p>
+                        Areas that may require your attention
+                    </p>
+
+                </div>
+
+                <span class="alert-header-icon">
+                    🔔
+                </span>
+
+            </div>
+
+
+            <div class="alerts-list">
+
+                {% for alert in alerts %}
+
+                <div class="student-alert">
+
+                    <span class="alert-icon">
+                        ⚠
+                    </span>
+
+                    <span>
+                        {{ alert }}
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+        {% else %}
+
+
+        <section class="student-dashboard-card success-card">
+
+            <span class="success-icon">
+                🎉
+            </span>
+
+            <div>
+
+                <h2>
+                    You're doing great!
+                </h2>
+
+                <p>
+                    There are currently no major academic alerts
+                    based on your available performance data.
+                </p>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- Academic Profile -->
+
+        <section class="student-dashboard-card">
+
+            <div class="dashboard-card-header">
+
+                <div>
+
+                    <h2>
+                        My Academic Profile
+                    </h2>
+
+                    <p>
+                        Your registered student information
+                    </p>
+
+                </div>
+
+                <span class="profile-icon">
+                    👤
+                </span>
+
+            </div>
+
+
+            <div class="student-profile-grid">
+
+
+                <div class="profile-item">
 
                     <span>
                         Full Name
@@ -148,7 +496,7 @@
                 </div>
 
 
-                <div class="info-box">
+                <div class="profile-item">
 
                     <span>
                         Email
@@ -161,33 +509,46 @@
                 </div>
 
 
-                <div class="info-box">
+                <div class="profile-item">
 
                     <span>
-                        Phone
+                        Course
                     </span>
 
                     <strong>
-                        {{ student.phone }}
+                        {{ student.course_name }}
                     </strong>
 
                 </div>
 
 
-                <div class="info-box">
+                <div class="profile-item">
 
                     <span>
-                        Gender
+                        Student Status
                     </span>
 
                     <strong>
-                        {{ student.gender }}
+                        {{ student.status }}
                     </strong>
 
                 </div>
 
 
-                <div class="info-box">
+                <div class="profile-item">
+
+                    <span>
+                        Enrollment Date
+                    </span>
+
+                    <strong>
+                        {{ student.enrollment_date }}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-item">
 
                     <span>
                         Date of Birth
@@ -200,56 +561,111 @@
                 </div>
 
 
-                <div class="info-box">
-
-                    <span>
-                        Enrollment Date
-                    </span>
-
-                    <strong>
-                        {{ student.enrollment_date }}
-                    </strong>
-
-                </div>
-
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- COMING SOON / FUTURE FEATURES -->
-
-        <div class="student-feature">
-
-            <div>
-
-                <p class="tag">
-                    STUDENT INSIGHTS
-                </p>
-
-                <h2>
-                    Academic Performance
-                </h2>
-
-                <p>
-                    Your attendance, assignments, marks and
-                    academic risk insights will appear here.
-                </p>
-
-            </div>
-
-            <div class="feature-badge">
-                Coming Soon
-            </div>
-
-        </div>
-
-    </div>
+    </main>
 
 
-    <footer>
-        StudentHub © 2026
-    </footer>
+
+    <!-- Performance Chart -->
+
+    <script>
+
+        const performanceData =
+            document.getElementById("performanceData");
+
+
+        const attendance =
+            Number(performanceData.dataset.attendance);
+
+
+        const marks =
+            Number(performanceData.dataset.marks);
+
+
+        const assignments =
+            Number(performanceData.dataset.assignments);
+
+
+        const chart =
+            document.getElementById("performanceChart");
+
+
+        new Chart(
+            chart,
+            {
+                type: "bar",
+
+                data: {
+
+                    labels: [
+                        "Attendance",
+                        "Average Marks",
+                        "Assignments"
+                    ],
+
+                    datasets: [
+                        {
+                            label: "Performance",
+
+                            data: [
+                                attendance,
+                                marks,
+                                assignments
+                            ]
+                        }
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            max: 100,
+
+                            ticks: {
+
+                                callback: function(value) {
+
+                                    return value + "%";
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    </script>
+
 
 </body>
 

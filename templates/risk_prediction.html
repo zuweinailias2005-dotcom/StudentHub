@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Risk Prediction | StudentHub</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+
+        <div class="logo">
+            StudentHub
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('students') }}">
+                Students
+            </a>
+
+            <a href="{{ url_for('analytics') }}">
+                Analytics
+            </a>
+
+            <a href="{{ url_for('risk_prediction') }}" class="active">
+                AI Prediction
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="risk-page">
+
+        <!-- Header -->
+        <section class="risk-header">
+
+            <div>
+
+                <span class="risk-label">
+                    AI POWERED
+                </span>
+
+                <h1>
+                    Student Risk Prediction
+                </h1>
+
+                <p>
+                    Identify students who may need academic support
+                    using attendance, marks and assignment performance.
+                </p>
+
+            </div>
+
+            <div class="ai-icon">
+                🧠
+            </div>
+
+        </section>
+
+
+        <!-- Information Cards -->
+        <section class="risk-info">
+
+            <div class="risk-info-card">
+
+                <span>
+                    🤖
+                </span>
+
+                <div>
+
+                    <h3>
+                        Machine Learning
+                    </h3>
+
+                    <p>
+                        Predictions are generated using a
+                        Decision Tree model.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="risk-info-card">
+
+                <span>
+                    📊
+                </span>
+
+                <div>
+
+                    <h3>
+                        Performance Analysis
+                    </h3>
+
+                    <p>
+                        Attendance, marks and assignment completion
+                        are analysed together.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Risk Table -->
+        <section class="risk-table-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Student Risk Overview
+                </h2>
+
+                <p>
+                    AI-generated academic risk levels
+                </p>
+
+            </div>
+
+
+            <div class="risk-table-wrapper">
+
+                <table class="risk-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Attendance
+                            </th>
+
+                            <th>
+                                Average Marks
+                            </th>
+
+                            <th>
+                                Assignments
+                            </th>
+
+                            <th>
+                                Risk Level
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for student in students %}
+
+                        <tr>
+
+                            <!-- Student -->
+                            <td>
+
+                                <div class="student-name-cell">
+
+                                    <div class="student-mini-avatar">
+                                        {{ student.name[0] }}
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            {{ student.name }}
+                                        </strong>
+
+                                        <small>
+                                            {{ student.email }}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Attendance -->
+                            <td>
+
+                                <div class="metric">
+
+                                    <div class="metric-number">
+                                        {{ student.attendance }}%
+                                    </div>
+
+                                    <div class="progress">
+
+                                        <div
+                                            class="progress-bar"
+                                            data-value="{{ student.attendance }}">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Marks -->
+                            <td>
+
+                                <div class="metric">
+
+                                    <div class="metric-number">
+                                        {{ student.marks }}%
+                                    </div>
+
+                                    <div class="progress">
+
+                                        <div
+                                            class="progress-bar"
+                                            data-value="{{ student.marks }}">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Assignments -->
+                            <td>
+
+                                <div class="metric">
+
+                                    <div class="metric-number">
+                                        {{ student.assignments }}%
+                                    </div>
+
+                                    <div class="progress">
+
+                                        <div
+                                            class="progress-bar"
+                                            data-value="{{ student.assignments }}">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Risk -->
+                            <td>
+
+                                {% if student.risk == "Low Risk" %}
+
+                                <span class="risk-badge low">
+                                    ✓ Low Risk
+                                </span>
+
+                                {% elif student.risk == "Medium Risk" %}
+
+                                <span class="risk-badge medium">
+                                    ! Medium Risk
+                                </span>
+
+                                {% else %}
+
+                                <span class="risk-badge high">
+                                    ⚠ High Risk
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Progress Bar Script -->
+    <script>
+
+        const progressBars =
+            document.querySelectorAll(".progress-bar");
+
+        progressBars.forEach(function (bar) {
+
+            const value =
+                Number(bar.dataset.value);
+
+            bar.style.width =
+                Math.min(Math.max(value, 0), 100) + "%";
+
+        });
+
+    </script>
+
+</body>
+
+</html>

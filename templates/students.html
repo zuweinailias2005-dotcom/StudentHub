@@ -15,7 +15,11 @@
 
 </head>
 
+
 <body>
+
+
+<!-- NAVIGATION -->
 
 <header class="navbar">
 
@@ -23,14 +27,23 @@
         StudentHub
     </div>
 
+
     <nav>
 
         <a href="{{ url_for('dashboard') }}">
             Dashboard
         </a>
 
-        <a href="{{ url_for('students') }}">
+        <a href="{{ url_for('students') }}" class="active">
             Students
+        </a>
+
+        <a href="{{ url_for('analytics') }}">
+            Analytics
+        </a>
+
+        <a href="{{ url_for('risk_prediction') }}">
+            AI Prediction
         </a>
 
         <a href="{{ url_for('add_student') }}">
@@ -46,32 +59,88 @@
 </header>
 
 
+
+<!-- MAIN -->
+
 <main class="container">
+
 
     <section class="students">
 
-        <h2>Students</h2>
+
+        <!-- PAGE HEADER -->
+
+        <div class="students-page-header">
+
+            <div>
+
+                <h2>
+                    Students
+                </h2>
+
+                <p>
+                    Manage and analyse student information
+                </p>
+
+            </div>
 
 
-        <!-- SEARCH AND FILTER -->
-
-        <form method="GET" class="filter-form">
-
-            <input
-                type="text"
-                name="search"
-                placeholder="Search students..."
-                value="{{ search }}"
+            <a
+                href="{{ url_for('add_student') }}"
+                class="add-student-button"
             >
+                + Add Student
+            </a>
+
+        </div>
 
 
-            <select name="course_id">
 
-                <option value="">
-                    All Courses
-                </option>
+        <!-- SEARCH AND FILTERS -->
 
-                {% for course in courses %}
+        <form
+            method="GET"
+            action="{{ url_for('students') }}"
+            class="advanced-filter-form"
+        >
+
+
+            <!-- SEARCH -->
+
+            <div class="filter-field">
+
+                <label for="search">
+                    Search
+                </label>
+
+                <input
+                    id="search"
+                    type="text"
+                    name="search"
+                    placeholder="Search by name or email..."
+                    value="{{ search }}"
+                >
+
+            </div>
+
+
+
+            <!-- COURSE -->
+
+            <div class="filter-field">
+
+                <label for="course">
+                    Course
+                </label>
+
+                <select id="course" name="course">
+
+                    <option value="">
+                        All Courses
+                    </option>
+
+
+                    {% for course in courses %}
 
                     <option
                         value="{{ course.id }}"
@@ -84,46 +153,141 @@
 
                     </option>
 
-                {% endfor %}
+                    {% endfor %}
 
-            </select>
+                </select>
+
+            </div>
 
 
-            <select name="status">
 
-                <option value="">
-                    All Status
-                </option>
+            <!-- STATUS -->
 
-                <option
-                    value="Active"
-                    {% if selected_status == "Active" %}
-                    selected
-                    {% endif %}
+            <div class="filter-field">
+
+                <label for="status">
+                    Status
+                </label>
+
+                <select id="status" name="status">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option
+                        value="Active"
+                        {% if selected_status == "Active" %}
+                        selected
+                        {% endif %}
+                    >
+                        Active
+                    </option>
+
+                    <option
+                        value="Inactive"
+                        {% if selected_status == "Inactive" %}
+                        selected
+                        {% endif %}
+                    >
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- AI RISK -->
+
+            <div class="filter-field">
+
+                <label for="risk">
+                    AI Risk
+                </label>
+
+                <select id="risk" name="risk">
+
+                    <option value="">
+                        All Risk Levels
+                    </option>
+
+                    <option
+                        value="Low Risk"
+                        {% if selected_risk == "Low Risk" %}
+                        selected
+                        {% endif %}
+                    >
+                        Low Risk
+                    </option>
+
+                    <option
+                        value="Medium Risk"
+                        {% if selected_risk == "Medium Risk" %}
+                        selected
+                        {% endif %}
+                    >
+                        Medium Risk
+                    </option>
+
+                    <option
+                        value="High Risk"
+                        {% if selected_risk == "High Risk" %}
+                        selected
+                        {% endif %}
+                    >
+                        High Risk
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="filter-actions">
+
+                <button
+                    type="submit"
+                    class="filter-button"
                 >
-                    Active
-                </option>
+                    Apply Filters
+                </button>
 
-                <option
-                    value="Inactive"
-                    {% if selected_status == "Inactive" %}
-                    selected
-                    {% endif %}
+
+                <a
+                    href="{{ url_for('students') }}"
+                    class="clear-filter-button"
                 >
-                    Inactive
-                </option>
+                    Clear
+                </a>
 
-            </select>
-
-
-            <button type="submit">
-                Search
-            </button>
+            </div>
 
         </form>
 
 
-        <!-- STUDENTS TABLE -->
+
+        <!-- RESULTS -->
+
+        <div class="student-results-header">
+
+            <h3>
+                Student Records
+            </h3>
+
+            <span>
+                {{ students|length }} students found
+            </span>
+
+        </div>
+
+
+
+        <!-- STUDENT TABLE -->
 
         <div class="table-container">
 
@@ -133,17 +297,33 @@
 
                     <tr>
 
-                        <th>ID</th>
+                        <th>
+                            ID
+                        </th>
 
-                        <th>Name</th>
+                        <th>
+                            Student
+                        </th>
 
-                        <th>Email</th>
+                        <th>
+                            Email
+                        </th>
 
-                        <th>Course</th>
+                        <th>
+                            Course
+                        </th>
 
-                        <th>Status</th>
+                        <th>
+                            Status
+                        </th>
 
-                        <th>Action</th>
+                        <th>
+                            AI Risk
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
 
                     </tr>
 
@@ -152,33 +332,99 @@
 
                 <tbody>
 
+
                     {% for student in students %}
 
                     <tr>
 
-                        <td>
-                            {{ student.id }}
-                        </td>
+
+                        <!-- ID -->
 
                         <td>
-                            {{ student.name }}
+                            #{{ student.id }}
                         </td>
+
+
+
+                        <!-- STUDENT -->
+
+                        <td>
+
+                            <div class="student-table-name">
+
+                                <div class="student-table-avatar">
+                                    {{ student.name[0] }}
+                                </div>
+
+                                <strong>
+                                    {{ student.name }}
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+
+
+                        <!-- EMAIL -->
 
                         <td>
                             {{ student.email }}
                         </td>
 
+
+
+                        <!-- COURSE -->
+
                         <td>
-                            {{ student.course }}
+                            {{ student.course_name or "Not Assigned" }}
                         </td>
 
+
+
+                        <!-- STATUS -->
+
                         <td>
 
-                            <span class="status-badge {{ student.status|lower }}">
+                            <span
+                                class="status-badge {{ student.status|lower }}"
+                            >
                                 {{ student.status }}
                             </span>
 
                         </td>
+
+
+
+                        <!-- AI RISK -->
+
+                        <td>
+
+                            {% if student.risk == "Low Risk" %}
+
+                            <span class="risk-badge low">
+                                ✓ Low Risk
+                            </span>
+
+                            {% elif student.risk == "Medium Risk" %}
+
+                            <span class="risk-badge medium">
+                                ! Medium Risk
+                            </span>
+
+                            {% else %}
+
+                            <span class="risk-badge high">
+                                ⚠ High Risk
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+
+                        <!-- ACTION -->
 
                         <td>
 
@@ -194,19 +440,49 @@
 
                         </td>
 
+
                     </tr>
+
 
                     {% else %}
 
+
+                    <!-- NO RESULTS -->
+
                     <tr>
 
-                        <td colspan="6">
-                            No students found.
+                        <td colspan="7">
+
+                            <div class="no-students">
+
+                                <div class="no-students-icon">
+                                    🔍
+                                </div>
+
+                                <h3>
+                                    No students found
+                                </h3>
+
+                                <p>
+                                    Try changing your search or filters.
+                                </p>
+
+                                <a
+                                    href="{{ url_for('students') }}"
+                                    class="clear-filter-button"
+                                >
+                                    Clear Filters
+                                </a>
+
+                            </div>
+
                         </td>
 
                     </tr>
 
+
                     {% endfor %}
+
 
                 </tbody>
 
@@ -214,16 +490,22 @@
 
         </div>
 
+
     </section>
+
 
 </main>
 
+
+
+<!-- FOOTER -->
 
 <footer>
 
     StudentHub © 2026
 
 </footer>
+
 
 </body>
 

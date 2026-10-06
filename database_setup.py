@@ -39,6 +39,17 @@ CREATE TABLE IF NOT EXISTS students (
 )
 """)
 
+connection.execute("""
+CREATE TABLE IF NOT EXISTS performance (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER NOT NULL,
+    attendance REAL,
+    average_marks REAL,
+    assignment_completion REAL,
+    FOREIGN KEY (student_id) REFERENCES students(id)
+)
+""")
+
 
 # ==================================================
 # USERS TABLE
@@ -188,6 +199,23 @@ cursor.executemany(
     """,
     students
 )
+
+performance_data = [
+    (1, 85, 78, 90),
+    (2, 92, 88, 95),
+    (3, 65, 58, 60),
+    (4, 55, 48, 50),
+    (5, 78, 72, 75),
+    (6, 90, 91, 96),
+    (7, 60, 55, 58),
+    (8, 88, 82, 89)
+]
+
+connection.executemany("""
+INSERT OR IGNORE INTO performance
+(student_id, attendance, average_marks, assignment_completion)
+VALUES (?, ?, ?, ?)
+""", performance_data)
 
 
 # ==================================================
