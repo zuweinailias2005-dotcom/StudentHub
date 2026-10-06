@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>StudentHub Dashboard</title>
+
+    <!-- Main CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVIGATION
+         ========================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            StudentHub
+        </div>
+
+        <nav>
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('students') }}">
+                Students
+            </a>
+
+            <a href="{{ url_for('add_student') }}">
+                Add Student
+            </a>
+
+            <a href="{{ url_for('analytics') }}">
+    Analytics
+</a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+         ========================= -->
+
+    <main class="container">
+
+
+        <!-- =========================
+             HERO SECTION
+             ========================= -->
+
+        <section class="hero">
+
+            <div class="tag">
+                STUDENT MANAGEMENT SYSTEM
+            </div>
+
+            <h1>
+                StudentHub Dashboard
+            </h1>
+
+            <p>
+                Manage students, courses and student records
+                from one simple dashboard.
+            </p>
+
+            <button
+                id="welcomeButton"
+                type="button"
+            >
+                Welcome
+            </button>
+
+        </section>
+
+
+        <!-- =========================
+             DASHBOARD CARDS
+             ========================= -->
+
+        <div class="cards">
+
+
+            <!-- Total Students -->
+
+            <div class="card">
+
+                <h2>
+                    {{ total_students }}
+                </h2>
+
+                <p>
+                    Total Students
+                </p>
+
+            </div>
+
+
+            <!-- Active Students -->
+
+            <div class="card">
+
+                <h2>
+                    {{ active_students }}
+                </h2>
+
+                <p>
+                    Active Students
+                </p>
+
+            </div>
+
+
+            <!-- Inactive Students -->
+
+            <div class="card">
+
+                <h2>
+                    {{ inactive_students }}
+                </h2>
+
+                <p>
+                    Inactive Students
+                </p>
+
+            </div>
+
+
+            <!-- Total Courses -->
+
+            <div class="card">
+
+                <h2>
+                    {{ total_courses }}
+                </h2>
+
+                <p>
+                    Total Courses
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             RECENT STUDENTS
+             ========================= -->
+
+        <section class="students">
+
+            <h2>
+                Recent Students
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Name</th>
+
+                        <th>Course</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for student in recent_students %}
+
+                    <tr>
+
+                        <td>
+                            {{ student.id }}
+                        </td>
+
+                        <td>
+                            {{ student.name }}
+                        </td>
+
+                        <td>
+                            {{ student.course }}
+                        </td>
+
+                        <td>
+                            {{ student.status }}
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'student_detail',
+                                    student_id=student.id
+                                ) }}"
+                                class="view-btn"
+                            >
+                                View
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="5">
+                            No students found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- =========================
+             COURSE STATISTICS
+             ========================= -->
+
+        <section class="students">
+
+            <h2>
+                Course Statistics
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Course</th>
+
+                        <th>Total Students</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for item in course_stats %}
+
+                    <tr>
+
+                        <td>
+                            {{ item.course }}
+                        </td>
+
+                        <td>
+                            {{ item.total }}
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="2">
+                            No course data available.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer>
+
+        <p>
+            StudentHub &copy; 2026
+        </p>
+
+    </footer>
+
+
+    <!-- Main JavaScript -->
+
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+    ></script>
+
+</body>
+
+</html>

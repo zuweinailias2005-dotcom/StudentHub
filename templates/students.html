@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Students | StudentHub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        StudentHub
+    </div>
+
+    <nav>
+
+        <a href="{{ url_for('dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('students') }}">
+            Students
+        </a>
+
+        <a href="{{ url_for('add_student') }}">
+            Add Student
+        </a>
+
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    <section class="students">
+
+        <h2>Students</h2>
+
+
+        <!-- SEARCH AND FILTER -->
+
+        <form method="GET" class="filter-form">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search students..."
+                value="{{ search }}"
+            >
+
+
+            <select name="course_id">
+
+                <option value="">
+                    All Courses
+                </option>
+
+                {% for course in courses %}
+
+                    <option
+                        value="{{ course.id }}"
+                        {% if selected_course == course.id|string %}
+                        selected
+                        {% endif %}
+                    >
+
+                        {{ course.name }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <select name="status">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option
+                    value="Active"
+                    {% if selected_status == "Active" %}
+                    selected
+                    {% endif %}
+                >
+                    Active
+                </option>
+
+                <option
+                    value="Inactive"
+                    {% if selected_status == "Inactive" %}
+                    selected
+                    {% endif %}
+                >
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+
+        <!-- STUDENTS TABLE -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Name</th>
+
+                        <th>Email</th>
+
+                        <th>Course</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>
+                            {{ student.id }}
+                        </td>
+
+                        <td>
+                            {{ student.name }}
+                        </td>
+
+                        <td>
+                            {{ student.email }}
+                        </td>
+
+                        <td>
+                            {{ student.course }}
+                        </td>
+
+                        <td>
+
+                            <span class="status-badge {{ student.status|lower }}">
+                                {{ student.status }}
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                class="view-btn"
+                                href="{{ url_for(
+                                    'student_detail',
+                                    student_id=student.id
+                                ) }}"
+                            >
+                                View
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="6">
+                            No students found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    StudentHub © 2026
+
+</footer>
+
+</body>
+
+</html>

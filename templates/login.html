@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | StudentHub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="login-page">
+
+    <div class="login-card">
+
+        <h1>StudentHub</h1>
+
+        <p class="login-subtitle">
+            Student Management System
+        </p>
+
+        {% if error %}
+            <div class="login-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST"
+              action="{{ url_for('login') }}">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <div class="demo-login">
+
+            <strong>Demo Admin</strong>
+
+            <p>
+                admin@studenthub.com
+            </p>
+
+            <p>
+                Password: admin123
+            </p>
+
+            <hr>
+
+            <strong>Demo Student</strong>
+
+            <p>
+                rahul@example.com
+            </p>
+
+            <p>
+                Password: student123
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

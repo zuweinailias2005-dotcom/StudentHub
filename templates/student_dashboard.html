@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | StudentHub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            StudentHub
+        </div>
+
+        <nav>
+            <a href="{{ url_for('student_dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                Logout
+            </a>
+        </nav>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="container">
+
+        <!-- Welcome Section -->
+
+        <div class="student-welcome">
+
+            <div>
+                <p class="tag">STUDENT PORTAL</p>
+
+                <h1>
+                    Welcome, {{ student.name }} 👋
+                </h1>
+
+                <p>
+                    Here is an overview of your student information.
+                </p>
+            </div>
+
+            <div class="student-avatar">
+                {{ student.name[0] }}
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY CARDS -->
+
+        <div class="student-cards">
+
+            <div class="student-card">
+
+                <span class="student-card-label">
+                    Course
+                </span>
+
+                <h2>
+                    {{ student.course }}
+                </h2>
+
+            </div>
+
+
+            <div class="student-card">
+
+                <span class="student-card-label">
+                    Status
+                </span>
+
+                {% if student.status == "Active" %}
+
+                    <h2 class="active-text">
+                        Active
+                    </h2>
+
+                {% else %}
+
+                    <h2 class="inactive-text">
+                        Inactive
+                    </h2>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="student-card">
+
+                <span class="student-card-label">
+                    Enrollment Date
+                </span>
+
+                <h2>
+                    {{ student.enrollment_date }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE -->
+
+        <div class="student-information">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="tag">MY PROFILE</p>
+
+                    <h2>
+                        Personal Information
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="student-info-grid">
+
+                <div class="info-box">
+
+                    <span>
+                        Full Name
+                    </span>
+
+                    <strong>
+                        {{ student.name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong>
+                        {{ student.email }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Phone
+                    </span>
+
+                    <strong>
+                        {{ student.phone }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Gender
+                    </span>
+
+                    <strong>
+                        {{ student.gender }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Date of Birth
+                    </span>
+
+                    <strong>
+                        {{ student.date_of_birth }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Enrollment Date
+                    </span>
+
+                    <strong>
+                        {{ student.enrollment_date }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMING SOON / FUTURE FEATURES -->
+
+        <div class="student-feature">
+
+            <div>
+
+                <p class="tag">
+                    STUDENT INSIGHTS
+                </p>
+
+                <h2>
+                    Academic Performance
+                </h2>
+
+                <p>
+                    Your attendance, assignments, marks and
+                    academic risk insights will appear here.
+                </p>
+
+            </div>
+
+            <div class="feature-badge">
+                Coming Soon
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+        StudentHub © 2026
+    </footer>
+
+</body>
+
+</html>
